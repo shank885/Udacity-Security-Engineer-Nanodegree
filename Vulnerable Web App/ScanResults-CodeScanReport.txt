@@ -1,0 +1,119 @@
+Scan results:
+
+--------------------------------------------------
+>> Issue: [B703:django_mark_safe] Potential XSS on mark_safe function.
+
+   OWASP: A07: 2017 Cross-Site Scripting XSS (https://bandit.readthedocs.io/en/latest/plugins/b703_django_mark_safe.html)
+   Severity: Critical
+   Confidence: High
+
+   Location: SampleCode/create_customer.py:24
+23	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+24	        self.banner = safestring.mark_safe(banner)
+25	
+
+   Recommendation: Be cautious with the context in which you're using mark_safe(). Verify that the content you're marking as safe is indeed coming from a trusted source and doesn't contain and malicious code.
+
+--------------------------------------------------
+
+>> Issue: [B320:blacklist] Using lxml.etree.fromstring to parse untrusted XML data is known to be vulnerable to XML attacks. Replace lxml.etree.fromstring with its defusedxml equivalent function.
+
+   OWASP: A04:2017 – XML External Entities (XXE) (https://docs.openstack.org/developer/bandit/api/bandit.blacklists.html#b313-b320-xml)
+   Severity: Critical
+   Confidence: Medium
+
+   Location: SampleCode/fix_customer_orders.py:11
+10	def customerOrdersXML():
+11	    root = lxml.etree.fromstring(xmlString)
+12	    root = fromstring(xmlString)
+
+   Recommendation: Search for all occurrences of lxml.etree.fromstring in your codebase where untrusted XML data is being parsed. Replace these occurrences with defusedxml.ElementTree.fromstring, which provides similar functionality but with added security measures against XML attacks.
+
+
+--------------------------------------------------
+
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+
+   OWASP: A09:2017-Using Components with Known Vulnerabilities (https://docs.openstack.org/bandit/1.4.0/plugins/subprocess_without_shell_equals_true.html)
+   Severity: High
+   Confidence: High
+
+   Location: SampleCode/onLogin.py:8
+7	    def process(self, user, startupcmd):
+8	        p = subprocess.Popen([startupcmd], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+9	        r = p.communicate()[0]
+
+   Recommendation: The issue typically arises when using the subprocess module without setting shell=True, potentially leading to command injection vulnerabilities. To address this, ensure that you properly validate and sanitize any input before passing it to subprocess calls.
+   
+   Avoid shell=True: Instead of setting shell=True, construct the command and arguments as a list and pass them directly to the subprocess module. This helps prevent shell injection vulnerabilities by avoiding shell interpretation of input.
+
+--------------------------------------------------
+	>> Issue: [B404:blacklist] Consider possible security implications associated with subprocess module.
+	   
+	   OWASP: A3:2017 - Sensitive Data Exposure (https://owasp.org/www-project-proactive-controls/v3/en/c8-protect-data-everywhere)
+	   Severity: High
+	   Confidence: High
+	   
+	   Location: SampleCode/onLogin.py:1
+	1	import os, sys, subprocess
+	2	
+	3	class userLogin():
+	4	    def __init__(self):
+
+	    Recommendation: Consider possible security implications associated with these modules.
+	    https://docs.openstack.org/bandit/1.4.0/blacklists/blacklist_imports.html#b404-import-subprocess
+	    https://bandit.readthedocs.io/en/latest/blacklists/blacklist_imports.html#b404-import-subprocess
+
+--------------------------------------------------
+
+>> Issue: [B303:blacklist] Use of insecure MD2, MD4, MD5, or SHA1 hash function.
+   
+   OWASP: A03:2017 – Sensitive Data Exposure (https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
+   Severity: Medium
+   Confidence: High
+   
+   Location: SampleCode/create_customer.py:23
+22	        self.email = email
+23	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+24	        self.banner = safestring.mark_safe(banner)
+
+   Recommendation: MD5 should never be used in passwords, we need to migrate to another slow hashing such as bcrypt.
+   		   https://bandit.readthedocs.io/en/1.6.2/blacklists/blacklist_calls.html#b303-md5
+
+--------------------------------------------------
+
+>> Issue: [B106:hardcoded_password_funcarg] Possible hardcoded password: 'mysecurepassword'
+
+   OWASP: A06:2017 – Security Misconfiguration (https://bandit.readthedocs.io/en/1.7.0/plugins/b106_hardcoded_password_funcarg.html)
+   Severity: Medium
+   Confidence: Medium
+
+   Location: SampleCode/init_db.py:14
+13	    def open(self):
+14	        self.conn = psycopg2.connect(user = "webappuser",
+15	                                    password = "mysecurepassword",
+16	                                    host = "localhost",
+17	                                    port = "5432",
+18	                                    database = "website")
+19	        self.cursor = self.conn.cursor()
+
+   Recommendation: We should never hardcode default passwords. 
+
+--------------------------------------------------
+
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   
+   OWASP: FALSE POSITIVE
+   Severity: FALSE POSITIVE
+   Confidence: High
+   
+   Location: SampleCode/init_db.py:40
+39	        letters = string.ascii_lowercase
+40	        result_str = ''.join(random.choice(letters) for i in range(length))
+41	        return result_str
+
+   Recommendation: FALSE POSITIVE, Ignore the warning
+   https://docs.openstack.org/bandit/1.2.0/blacklists/blacklist_calls.html#b311-random
+
+--------------------------------------------------
+

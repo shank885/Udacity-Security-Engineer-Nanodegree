@@ -1,0 +1,42 @@
+UPDATES:
+
+Static Code Scan Report:
+
+1. Each of the issues categorized with OWASP Top 10 2017.
+2. Each issue is assigned severity type.
+3. Each issue assigned with the high level best practice on how to fix it or a link to OWASP Top 10.
+4. All items sorted based on Severity type organized from highest to lowest severity.
+5. All items that are repeated or a variant of the original item has been grouped together.
+
+
+Web App Analysis:
+
+1. Code scanning issues removed from the web application report.
+2. Atleset 10 security issues identified with atleast one issue in each of the following categories:
+	- SQLi - 1
+	- Broken Auth - 1
+	- XSS - 1
+	- Broken Access - 2
+	- Sensitive Data Exposure - 3
+	- Security Misconfiguration - 2
+	
+	Additional
+	- Insecure Deserialization - 1
+2. For each of the issues, generic description that allows a  non-technical user to understand why it is considered an issue has been added.
+3. Every step has been outlined using a combination of writing and annotated screenshots.
+4. Each issue has been categorized with the OWASP Top 10 2017.
+5. For each of the issues, Add atleast two recommendations followed by a reference link added.
+6. The recommendation is generic and easy to understand.
+
+	
+
+
+
+
+
+
+
+
+
+
+
